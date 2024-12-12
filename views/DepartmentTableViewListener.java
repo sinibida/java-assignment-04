@@ -1,12 +1,10 @@
 package views;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Arrays;
 
-import shared.MsgDialog;
 import shared.NumberFormatErrDialog;
 import shared.SQLExceptionDialog;
 import shared.SQLRunner;
@@ -14,10 +12,45 @@ import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
 
 public class DepartmentTableViewListener implements TableViewListener {
-  static final String INSERT_STATEMENT = "INSERT INTO DEPATMENT VALUES (?, ?, ?)";
+  static final String[] ALL_COLUMNS = new String[] { "Num",
+      "Name",
+      "ManagedBy", };
+  static final String[] ID_COLUMNS = new String[] { "Num" };
+
+  // TODO replace to `static final`
+  // https://stackoverflow.com/a/11219598
+  static final String SELECT_ALL_STATEMENT = "SELECT * FROM DEPATMENT";
+
   static final String SELECT_ID_STATEMENT = "SELECT * FROM DEPATMENT WHERE Num=?";
+  static final int[] SELECT_ID_TYPES = new int[] {
+      Types.NUMERIC,
+  };
+  final static String SELECT_ID_TITLE = "변경할 데이터 조회";
+  final static String SELECT_ID_BUTTON = "선택";
+
+  static final String INSERT_STATEMENT = "INSERT INTO DEPATMENT VALUES (?, ?, ?)";
+  static final int[] INSERT_TYPES = new int[] {
+      Types.NUMERIC,
+      Types.VARCHAR,
+      Types.NUMERIC,
+  };
+  final static String INSERT_TITLE = "부서 추가";
+  final static String INSERT_BUTTON = "추가";
+
   static final String UPDATE_STATEMENT = "UPDATE DEPATMENT SET Num=?, Name=?, ManagedBy=? WHERE Num=?";
+  static final int[] UPDATE_TYPES = new int[] {
+      Types.NUMERIC,
+      Types.VARCHAR,
+      Types.NUMERIC,
+      Types.NUMERIC,
+  };
+  final static String UPDATE_TITLE = "부서 정보 변경";
+  final static String UPDATE_BUTTON = "수정";
+
   static final String DELETE_STATEMENT = "DELETE FROM DEPATMENT WHERE Num=?";
+  static final int[] DELETE_TYPES = new int[] {
+      Types.NUMERIC,
+  };
 
   SQLRunner runner;
 
@@ -41,40 +74,26 @@ public class DepartmentTableViewListener implements TableViewListener {
 
   @Override
   public String[] getColumnNames() {
-    /**
-     * 
-     * Num NUMBER NOT NULL PRIMARY KEY,
-     * Name VARCHAR(32),
-     * ManagedBy NUMBER,
-     * 
-     */
-    return new String[] { "Num",
-        "Name",
-        "ManagedBy", };
+    return ALL_COLUMNS;
   }
 
   @Override
   public Object[][] getData() {
-    final String STATEMENT = "SELECT * FROM DEPATMENT";
     try {
-      return Utils.statementToObjectMatrix(runner, STATEMENT);
+      return Utils.statementToObjectMatrix(runner, SELECT_ALL_STATEMENT);
     } catch (SQLException e) {
-      new SQLExceptionDialog("Couldn't show SQL result.", STATEMENT, e).setVisible(true);
+      new SQLExceptionDialog("Couldn't show SQL result.", SELECT_ALL_STATEMENT, e).setVisible(true);
       return new Object[][] {};
     }
   }
 
   @Override
   public void onInsert() {
-    FormDialog dialog = new FormDialog("부서 추가", getColumnNames(), "추가", new FormDialogListener() {
+    FormDialog dialog = new FormDialog(INSERT_TITLE, ALL_COLUMNS, INSERT_BUTTON, new FormDialogListener() {
       @Override
       public boolean onSubmit(String[] values) {
         try {
-          Utils.runPreparedStatement(insertStatement, new int[] {
-              Types.NUMERIC,
-              Types.VARCHAR,
-              Types.NUMERIC,
-          }, values);
+          Utils.runPreparedStatement(insertStatement, INSERT_TYPES, values);
           return true;
         } catch (SQLException e) {
           new SQLExceptionDialog("Couldn't run SQL update.", INSERT_STATEMENT + " + " + String.join(", ", values), e)
@@ -94,25 +113,25 @@ public class DepartmentTableViewListener implements TableViewListener {
   Object[] selectedRow = null;
 
   protected Object[] selectRowWithId() {
-    FormDialog idDialog = new FormDialog("변경할 데이터 조회", new String[] { "Num" }, "조회", new FormDialogListener() {
-      @Override
-      public boolean onSubmit(String[] values) {
-        try {
-          selectedRow = Utils.selectOne(selectIdStatement, new int[] {
-              Types.NUMERIC,
-          }, values);
-          return selectedRow != null;
-        } catch (SQLException e) {
-          new SQLExceptionDialog("Couldn't run SQL update.", SELECT_ID_STATEMENT + " + " + String.join(", ", values), e)
-              .setVisible(true);
-          return false;
-        } catch (NumberFormatException e) {
-          new NumberFormatErrDialog(e).setVisible(true);
-          return false;
-        }
-      }
+    FormDialog idDialog = new FormDialog(SELECT_ID_TITLE, ID_COLUMNS, SELECT_ID_BUTTON,
+        new FormDialogListener() {
+          @Override
+          public boolean onSubmit(String[] values) {
+            try {
+              selectedRow = Utils.selectOne(selectIdStatement, SELECT_ID_TYPES, values);
+              return selectedRow != null;
+            } catch (SQLException e) {
+              new SQLExceptionDialog("Couldn't run SQL update.",
+                  SELECT_ID_STATEMENT + " + " + String.join(", ", values), e)
+                  .setVisible(true);
+              return false;
+            } catch (NumberFormatException e) {
+              new NumberFormatErrDialog(e).setVisible(true);
+              return false;
+            }
+          }
 
-    });
+        });
 
     selectedRow = null;
     idDialog.setVisible(true);
@@ -127,11 +146,9 @@ public class DepartmentTableViewListener implements TableViewListener {
 
     String[] values = new String[] { selectedRow[0].toString() };
     try {
-      Utils.runPreparedStatement(deleteStatement, new int[] {
-          Types.NUMERIC,
-      }, values);
+      Utils.runPreparedStatement(deleteStatement, DELETE_TYPES, values);
     } catch (SQLException e) {
-      new SQLExceptionDialog("Couldn't run SQL update.", SELECT_ID_STATEMENT + " + " + String.join(", ", values), e)
+      new SQLExceptionDialog("Couldn't run SQL update.", DELETE_STATEMENT + " + " + String.join(", ", values), e)
           .setVisible(true);
     } catch (NumberFormatException e) {
       new NumberFormatErrDialog(e).setVisible(true);
@@ -140,19 +157,14 @@ public class DepartmentTableViewListener implements TableViewListener {
 
   @Override
   public void onUpdate() {
-    FormDialog dialog = new FormDialog("부서 정보 변경", getColumnNames(), "수정", new FormDialogListener() {
+    FormDialog dialog = new FormDialog(UPDATE_TITLE, ALL_COLUMNS, UPDATE_BUTTON, new FormDialogListener() {
       @Override
       public boolean onSubmit(String[] values) {
         // LATER: Abtract this try-catch w/ Abstract Class?
         try {
           String[] newValues = Arrays.copyOf(values, values.length + 1);
           newValues[values.length] = values[0];
-          Utils.runPreparedStatement(updateStatement, new int[] {
-              Types.NUMERIC,
-              Types.VARCHAR,
-              Types.NUMERIC,
-              Types.NUMERIC,
-          }, newValues);
+          Utils.runPreparedStatement(updateStatement, UPDATE_TYPES, newValues);
           return true;
         } catch (SQLException e) {
           new SQLExceptionDialog("Couldn't run SQL update.", SELECT_ID_STATEMENT + " + " + String.join(", ", values), e)
