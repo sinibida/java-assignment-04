@@ -11,11 +11,14 @@ import javax.swing.JTextArea;
  * 여러 줄의 메세지 출력을 지원한다.
  */
 public class MsgDialog extends JDialog {
-  public MsgDialog(String title, String message) {
+  public MsgDialog(String title, String message, boolean modal) {
     setSize(400, 200);
     setLocationRelativeTo(this);
-    // 상위 윈도우 접근을 막음
-    setModalityType(ModalityType.APPLICATION_MODAL);
+
+    if (modal) {
+      // 상위 윈도우 접근을 막음
+      setModalityType(ModalityType.APPLICATION_MODAL);
+    }
 
     JTextArea label = new JTextArea(message);
 
@@ -29,5 +32,9 @@ public class MsgDialog extends JDialog {
     setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     setVisible(true);
+  }
+
+  public MsgDialog(String title, String message) {
+    this(title, message, true);
   }
 }
