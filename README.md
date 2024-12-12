@@ -12,3 +12,7 @@ javac **/*.java && java -cp "ojdbc6.jar:." Main
 
 - `JFrame.pack()`: 프레임 내 컨테이너에 맞춰서 프레임의 크기를 맞추어줌
   - https://stackoverflow.com/a/22982334
+
+# 오답노트
+
+- `toArray` 사용 시 저장 배열의 크기를 미리 설정해주어야 함. `Vector.size()`로

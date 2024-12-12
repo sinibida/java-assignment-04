@@ -1,17 +1,19 @@
 package views;
 
 import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.TextField;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -28,6 +30,8 @@ public class FormDialog extends JDialog {
   String confirmLabel;
   String[] fields;
   FormDialogListener listener;
+
+  Vector<JTextField> renderedFields;
 
   /**
    * @param title        Dialog의 타이틀
@@ -66,7 +70,26 @@ public class FormDialog extends JDialog {
     this.listener = listener;
   }
 
+  void confirm() {
+    Vector<String> values = new Vector<>();
+    for (JTextField field : renderedFields) {
+      values.add(field.getText());
+    }
+    String[] ret = new String[values.size()];
+    values.toArray(ret);
+    listener.onSubmit(ret);
+  }
+
+  void close() {
+    setVisible(false);
+    dispose();
+  }
+
   void render() {
+    setTitle(title);
+    setModalityType(ModalityType.APPLICATION_MODAL);
+    setLocationRelativeTo(null);
+
     JPanel c = new JPanel();
 
     c.setLayout(new BorderLayout());
@@ -75,6 +98,8 @@ public class FormDialog extends JDialog {
 
     JPanel centerPanel = new JPanel();
     {
+      renderedFields = new Vector<>();
+
       GridLayout layout = new GridLayout(fields.length, 2, 8, 8);
       centerPanel.setLayout(layout);
       for (String fieldLabel : fields) {
@@ -82,9 +107,9 @@ public class FormDialog extends JDialog {
         JLabel label = new JLabel(fieldLabel);
         centerPanel.add(label);
 
-        TextField field = new TextField(20);
-        // TODO: Interpolation
+        JTextField field = new JTextField(20);
         centerPanel.add(field);
+        renderedFields.add(field);
       }
     }
     c.add(centerPanel, BorderLayout.CENTER);
@@ -97,17 +122,28 @@ public class FormDialog extends JDialog {
 
       JButton confirm = new JButton(confirmLabel);
       confirm.setFont(confirm.getFont().deriveFont(Font.BOLD));
-      // TODO: confirm interpolation
+      confirm.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          confirm();
+          close();
+        }
+      });
       bottomPanel.add(confirm);
 
       JButton cancel = new JButton(CANCEL_LABEL);
+      cancel.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+          close();
+        }
+      });
       bottomPanel.add(cancel);
     }
     c.add(bottomPanel, BorderLayout.SOUTH);
 
     setContentPane(c);
     pack();
-    setTitle(title);
   }
 
   @Override
