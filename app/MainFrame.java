@@ -16,7 +16,7 @@ public class MainFrame extends JFrame {
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    setContentPane(new MainContentPane());
+    setContentPane(new MainContentPane(runner));
 
     addWindowListener(new WindowAdapter() {
       @Override
