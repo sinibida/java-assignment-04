@@ -20,6 +20,7 @@ public class Loader {
     MsgDialog dialog = null;
     try {
       dialog = new MsgDialog("로딩 중", "로딩 중입니다...", false);
+      dialog.setVisible(true);
       LoaderReturn ret = new LoaderReturn();
       ret.runner = SQLRunner.getInstance(args.dbUrl, args.dbUsername, args.dbPassword);
 

@@ -29,9 +29,9 @@ class Main {
       new MainFrame(result.runner);
     } catch (ClassNotFoundException e) {
       // https://stackoverflow.com/a/7191445
-      new MsgDialog("JDBC 로드 오류", "JDBC 라이브러리(ojdbc6.jar)를 로드하는 데 오류가 발생했습니다.\n\n" + e.getStackTrace());
+      new MsgDialog("JDBC 로드 오류", "JDBC 라이브러리(ojdbc6.jar)를 로드하는 데 오류가 발생했습니다.\n\n" + e.getStackTrace()).setVisible(true);
     } catch (SQLException e) {
-      new MsgDialog("연결 오류", "데이터베이스에 연결하는 데 오류가 발생했습니다. 연결 정보를 재확인하십시오. (예: 사용자명, 비밀번호, URL)\n\n" + e.getStackTrace());
+      new MsgDialog("연결 오류", "데이터베이스에 연결하는 데 오류가 발생했습니다. 연결 정보를 재확인하십시오. (예: 사용자명, 비밀번호, URL)\n\n" + e.getStackTrace()).setVisible(true);
     }
   }
 }
