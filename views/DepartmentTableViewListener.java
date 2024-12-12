@@ -17,12 +17,14 @@ public class DepartmentTableViewListener implements TableViewListener {
   static final String INSERT_STATEMENT = "INSERT INTO DEPATMENT VALUES (?, ?, ?)";
   static final String SELECT_ID_STATEMENT = "SELECT * FROM DEPATMENT WHERE Num=?";
   static final String UPDATE_STATEMENT = "UPDATE DEPATMENT SET Num=?, Name=?, ManagedBy=? WHERE Num=?";
+  static final String DELETE_STATEMENT = "DELETE FROM DEPATMENT WHERE Num=?";
 
   SQLRunner runner;
 
   PreparedStatement insertStatement;
   PreparedStatement selectIdStatement;
   PreparedStatement updateStatement;
+  PreparedStatement deleteStatement;
 
   public DepartmentTableViewListener(SQLRunner runner) {
     this.runner = runner;
@@ -31,12 +33,11 @@ public class DepartmentTableViewListener implements TableViewListener {
       insertStatement = runner.getPreparedQuery(INSERT_STATEMENT);
       selectIdStatement = runner.getPreparedQuery(SELECT_ID_STATEMENT);
       updateStatement = runner.getPreparedQuery(UPDATE_STATEMENT);
+      deleteStatement = runner.getPreparedQuery(DELETE_STATEMENT);
     } catch (SQLException e) {
       new SQLExceptionDialog("Couldn't prepare SQL statements", null, e).setVisible(true);
     }
   }
-
-  // LEFT OFF: SQL 노가다!
 
   @Override
   public String[] getColumnNames() {
@@ -89,16 +90,10 @@ public class DepartmentTableViewListener implements TableViewListener {
     dialog.setVisible(true);
   }
 
-  @Override
-  public void onDelete() {
-    System.out.println("Update!");
-  }
-
   // This cannot be a local variable because Java(536871575)
   Object[] selectedRow = null;
 
-  @Override
-  public void onUpdate() {
+  protected Object[] selectRowWithId() {
     FormDialog idDialog = new FormDialog("변경할 데이터 조회", new String[] { "Num" }, "조회", new FormDialogListener() {
       @Override
       public boolean onSubmit(String[] values) {
@@ -119,6 +114,32 @@ public class DepartmentTableViewListener implements TableViewListener {
 
     });
 
+    selectedRow = null;
+    idDialog.setVisible(true);
+    return selectedRow;
+  }
+
+  @Override
+  public void onDelete() {
+    Object[] selectedRow = selectRowWithId();
+    if (selectedRow == null)
+      return;
+
+    String[] values = new String[] { selectedRow[0].toString() };
+    try {
+      Utils.runPreparedStatement(deleteStatement, new int[] {
+          Types.NUMERIC,
+      }, values);
+    } catch (SQLException e) {
+      new SQLExceptionDialog("Couldn't run SQL update.", SELECT_ID_STATEMENT + " + " + String.join(", ", values), e)
+          .setVisible(true);
+    } catch (NumberFormatException e) {
+      new NumberFormatErrDialog(e).setVisible(true);
+    }
+  }
+
+  @Override
+  public void onUpdate() {
     FormDialog dialog = new FormDialog("부서 정보 변경", getColumnNames(), "수정", new FormDialogListener() {
       @Override
       public boolean onSubmit(String[] values) {
@@ -144,8 +165,7 @@ public class DepartmentTableViewListener implements TableViewListener {
       }
     });
 
-    selectedRow = null;
-    idDialog.setVisible(true);
+    Object[] selectedRow = selectRowWithId();
     if (selectedRow == null)
       return;
     String[] initialValue = new String[selectedRow.length];
