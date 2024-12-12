@@ -1,7 +1,7 @@
 # 실행 코드 (MacOS 기준)
 
 ```
-javac DBex.java && java -cp "ojdbc6.jar:." DBex
+javac **/*.java && java -cp "ojdbc6.jar:." Main
 ```
 
 - `DBex.java > SQLRunner` 의 각 상수를 알맞게 조절해서 실행
