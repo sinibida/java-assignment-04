@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import shared.SQLRunner;
 import views.DepartmentTableViewListener;
 import views.EmployeeTableViewListener;
+import views.ProjectTableViewListener;
 import views.TableView;
 
 /**
@@ -27,7 +28,7 @@ public class MainContentPane extends JPanel {
 
     TableView employeeView = new TableView("직원 정보", new EmployeeTableViewListener(runner));
     TableView enrollmentView = new TableView("부서 정보", new DepartmentTableViewListener(runner));
-    TableView projectView = new TableView("프로젝트 정보", null);
+    TableView projectView = new TableView("프로젝트 정보",new ProjectTableViewListener(runner));
 
     add(employeeView);
     add(enrollmentView);
