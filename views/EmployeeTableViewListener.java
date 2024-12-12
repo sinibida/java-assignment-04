@@ -32,7 +32,8 @@ public class EmployeeTableViewListener implements TableViewListener {
 
   @Override
   public void onInsert() {
-    System.out.println("Update!");
+    FormDialog dialog = new FormDialog("직원 추가", getColumnNames(), "추가", null);
+    dialog.setVisible(true);
   }
 
   @Override
