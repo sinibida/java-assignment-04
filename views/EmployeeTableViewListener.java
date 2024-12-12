@@ -1,18 +1,30 @@
 package views;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Vector;
 
 import shared.MsgDialog;
+import shared.SQLExceptionDialog;
 import shared.SQLRunner;
 import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
 
 public class EmployeeTableViewListener implements TableViewListener {
+  static final String INSERT_STATEMENT = "INSERT INTO EMPLOYEE VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
   SQLRunner runner;
+
+  PreparedStatement insertStatement;
 
   public EmployeeTableViewListener(SQLRunner runner) {
     this.runner = runner;
+
+    try {
+      insertStatement = runner.getPreparedQuery(INSERT_STATEMENT);
+    } catch (SQLException e) {
+      new SQLExceptionDialog("Couldn't prepare SQL statements", null, e).setVisible(true);
+    }
   }
 
   @Override
@@ -56,9 +68,7 @@ public class EmployeeTableViewListener implements TableViewListener {
 
       return data;
     } catch (SQLException e) {
-      MsgDialog errDialog = new MsgDialog("SQL Failure",
-          "Couldn't show SQL result.\n\n" + STATEMENT + "\n\n" + e.toString());
-      errDialog.setVisible(true);
+      new SQLExceptionDialog("Couldn't show SQL result.", STATEMENT, e).setVisible(true);
       return new Object[][] {};
     }
   }
@@ -68,9 +78,14 @@ public class EmployeeTableViewListener implements TableViewListener {
     FormDialog dialog = new FormDialog("직원 추가", getColumnNames(), "추가", new FormDialogListener() {
       @Override
       public void onSubmit(String[] values) {
-        // TODO Submit SQL
-        for (String string : values) {
-          System.out.println(string);
+        try {
+          for (int i = 0; i < values.length; i++) {
+            insertStatement.setString(i, values[i]);
+          }
+          insertStatement.executeUpdate();
+        } catch (SQLException e) {
+          new SQLExceptionDialog("Couldn't run SQL update.", INSERT_STATEMENT + " + " + String.join(", ", values), e)
+              .setVisible(true);
         }
       }
 
