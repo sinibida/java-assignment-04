@@ -2,6 +2,7 @@ package app;
 
 import java.sql.SQLException;
 
+import shared.MsgDialog;
 import shared.SQLRunner;
 
 public class Loader {
@@ -16,11 +17,16 @@ public class Loader {
   }
 
   public LoaderReturn load(LoaderArgs args) throws ClassNotFoundException, SQLException {
-    // TODO: Show dialog here
+    MsgDialog dialog = null;
+    try {
+      dialog = new MsgDialog("로딩 중", "로딩 중입니다...");
+      LoaderReturn ret = new LoaderReturn();
+      ret.runner = SQLRunner.getInstance(args.dbUrl, args.dbUsername, args.dbPassword);
 
-    LoaderReturn ret = new LoaderReturn();
-    ret.runner = SQLRunner.getInstance(args.dbUrl, args.dbUsername, args.dbPassword);
-
-    return ret;
+      return ret;
+    } finally {
+      if (dialog != null)
+        dialog.dispose();
+    }
   }
 }
