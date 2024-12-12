@@ -23,7 +23,7 @@ public class MainContentPane extends JPanel {
 
     setBorder(new EmptyBorder(new Insets(24, 24, 24, 24)));
 
-    TableView employeeView = new TableView("직원 정보", new EmployeeTableViewListener(null));
+    TableView employeeView = new TableView("직원 정보", new EmployeeTableViewListener(runner));
     TableView enrollmentView = new TableView("부서 정보", null);
     TableView projectView = new TableView("프로젝트 정보", null);
 

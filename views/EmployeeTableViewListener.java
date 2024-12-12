@@ -1,5 +1,9 @@
 package views;
 
+import java.sql.SQLException;
+import java.util.Vector;
+
+import shared.MsgDialog;
 import shared.SQLRunner;
 import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
@@ -13,22 +17,50 @@ public class EmployeeTableViewListener implements TableViewListener {
 
   @Override
   public String[] getColumnNames() {
-    return new String[] { "A", "B", "C" };
+    return new String[] { "Ssn",
+        "BDate",
+        "Sex",
+        "Address",
+        "Salary",
+        "Fname",
+        "Minit",
+        "Lname",
+        "Supervision",
+        "WorksFor", };
   }
 
   @Override
   public Object[][] getData() {
-    return new Object[][] {
-        {
-            1, "a", 100
-        },
-        {
-            1, "a", 100
-        },
-        {
-            1, "a", 100
-        },
-    };
+    final String STATEMENT = "SELECT * FROM EMPLOYEE";
+    try {
+      var result = runner.runQuery(STATEMENT);
+      var metadata = result.getMetaData();
+
+      int columnCnt = metadata.getColumnCount();
+      String[] columnNames = new String[columnCnt];
+      for (int i = 0; i < columnCnt; i++) {
+        columnNames[i] = metadata.getColumnLabel(i + 1);
+      }
+
+      Vector<Object[]> dataVector = new Vector<Object[]>();
+      while (result.next()) {
+        Object[] objects = new Object[columnCnt];
+        for (int i = 0; i < columnCnt; i++) {
+          objects[i] = result.getObject(i + 1);
+        }
+        dataVector.add(objects);
+      }
+
+      Object[][] data = new Object[dataVector.size()][columnCnt];
+      dataVector.toArray(data);
+
+      return data;
+    } catch (SQLException e) {
+      MsgDialog errDialog = new MsgDialog("SQL Failure",
+          "Couldn't show SQL result.\n\n" + STATEMENT + "\n\n" + e.toString());
+      errDialog.setVisible(true);
+      return new Object[][] {};
+    }
   }
 
   @Override
