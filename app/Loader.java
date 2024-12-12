@@ -1,6 +1,5 @@
 package app;
 
-import java.awt.Dialog.ModalityType;
 import java.sql.SQLException;
 
 import shared.MsgDialog;
