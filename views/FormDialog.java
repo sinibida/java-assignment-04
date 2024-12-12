@@ -117,7 +117,6 @@ public class FormDialog extends JDialog {
       GridLayout layout = new GridLayout(fields.length, 2, 8, 8);
       centerPanel.setLayout(layout);
       for (String fieldLabel : fields) {
-        // LATER: 라벨의 너비를 조금 줄이기: GridBagLayout 활용?
         JLabel label = new JLabel(fieldLabel);
         centerPanel.add(label);
 

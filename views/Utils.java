@@ -91,7 +91,6 @@ class Utils {
     return statement.executeQuery();
   }
 
-  // LATER: Also use PreparedStatement here
   static Object[][] statementToObjectMatrix(SQLRunner runner, String statement) throws SQLException {
     return resultSetToObjectMatrix(runner.runQuery(statement));
   }

@@ -39,7 +39,6 @@ public class SQLRunner {
     }
   }
 
-  // TODO: not tested
   public PreparedStatement getPreparedQuery(String statement) throws SQLException {
     try {
       PreparedStatement ret = connection.prepareStatement(statement);
