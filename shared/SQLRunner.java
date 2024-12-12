@@ -2,6 +2,7 @@ package shared;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,6 +33,17 @@ public class SQLRunner {
     try {
       Statement statementClass = connection.createStatement();
       return statementClass.executeQuery(statement);
+    } catch (SQLException e) {
+      System.err.println("SQL Execution Failed: " + statement);
+      throw e;
+    }
+  }
+
+  // TODO: not tested
+  public PreparedStatement getPreparedQuery(String statement) throws SQLException {
+    try {
+      PreparedStatement ret = connection.prepareStatement(statement);
+      return ret;
     } catch (SQLException e) {
       System.err.println("SQL Execution Failed: " + statement);
       throw e;
