@@ -62,7 +62,7 @@ public class TableView extends JPanel {
 
     JPanel bottomPanel = new JPanel();
     {
-      bottomPanel.setLayout(new FlowLayout());
+      bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
       JButton selectButton = new JButton("검색");
       selectButton.addActionListener(new ActionListener() {

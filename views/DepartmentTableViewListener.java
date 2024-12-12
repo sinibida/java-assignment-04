@@ -11,14 +11,14 @@ import shared.SQLRunner;
 import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
 
-public class EmployeeTableViewListener implements TableViewListener {
-  static final String INSERT_STATEMENT = "INSERT INTO EMPLOYEE VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+public class DepartmentTableViewListener implements TableViewListener {
+  static final String INSERT_STATEMENT = "INSERT INTO DEPATMENT VALUES (?, ?, ?)";
 
   SQLRunner runner;
 
   PreparedStatement insertStatement;
 
-  public EmployeeTableViewListener(SQLRunner runner) {
+  public DepartmentTableViewListener(SQLRunner runner) {
     this.runner = runner;
 
     try {
@@ -30,21 +30,21 @@ public class EmployeeTableViewListener implements TableViewListener {
 
   @Override
   public String[] getColumnNames() {
-    return new String[] { "Ssn",
-        "BDate",
-        "Sex",
-        "Address",
-        "Salary",
-        "Fname",
-        "Minit",
-        "Lname",
-        "Supervision",
-        "WorksFor", };
+    /**
+     * 
+  Num NUMBER NOT NULL PRIMARY KEY,
+  Name VARCHAR(32),
+  ManagedBy NUMBER,
+
+     */
+    return new String[] { "Num",
+        "Name",
+        "ManagesBy", };
   }
 
   @Override
   public Object[][] getData() {
-    final String STATEMENT = "SELECT * FROM EMPLOYEE";
+    final String STATEMENT = "SELECT * FROM DEPATMENT";
     try {
       return Utils.statementToObjectMatrix(runner, STATEMENT);
     } catch (SQLException e) {
@@ -61,14 +61,7 @@ public class EmployeeTableViewListener implements TableViewListener {
         try {
           Utils.runPreparedStatement(insertStatement, new int[] {
               Types.NUMERIC,
-              Types.DATE,
               Types.VARCHAR,
-              Types.VARCHAR,
-              Types.NUMERIC,
-              Types.VARCHAR,
-              Types.VARCHAR,
-              Types.VARCHAR,
-              Types.NUMERIC,
               Types.NUMERIC,
           }, values);
           return true;

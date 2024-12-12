@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import shared.SQLRunner;
+import views.DepartmentTableViewListener;
 import views.EmployeeTableViewListener;
 import views.TableView;
 
@@ -19,12 +20,13 @@ public class MainContentPane extends JPanel {
   public MainContentPane(SQLRunner runner) {
     this.runner = runner;
     
+    // LATER: 직원이 Column이 많으므로 더 길게 배치?
     setLayout(new GridLayout(1, 3, 16, 0));
 
     setBorder(new EmptyBorder(new Insets(24, 24, 24, 24)));
 
     TableView employeeView = new TableView("직원 정보", new EmployeeTableViewListener(runner));
-    TableView enrollmentView = new TableView("부서 정보", null);
+    TableView enrollmentView = new TableView("부서 정보", new DepartmentTableViewListener(runner));
     TableView projectView = new TableView("프로젝트 정보", null);
 
     add(employeeView);
