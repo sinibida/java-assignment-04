@@ -11,7 +11,7 @@ public class MainFrame extends JFrame {
   SQLRunner runner = null;
 
   private void init() {
-    setTitle("수강신청 창");
+    setTitle("회사 전산");
     setSize(1200, 600);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
