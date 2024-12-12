@@ -3,6 +3,7 @@ package views;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -41,23 +42,20 @@ public class TableView extends JPanel {
     tableHeader.setReorderingAllowed(false);
   }
 
-  private void initTableHeader() {
-    
-  }
-
   public TableView(String headerText, TableViewListener listener) {
-    setLayout(new BorderLayout());
+    setLayout(new BorderLayout(0, 8));
 
     JLabel header = new JLabel(headerText);
+    header.setFont(getFont().deriveFont(24.0f).deriveFont(Font.BOLD));
     add(header, BorderLayout.NORTH);
 
     JPanel centerPanel = new JPanel();
     {
       centerPanel.setLayout(new BorderLayout());
-      
+
       initTable();
       centerPanel.add(table, BorderLayout.CENTER);
-      
+
       centerPanel.add(tableHeader, BorderLayout.NORTH);
     }
     add(centerPanel, BorderLayout.CENTER);
