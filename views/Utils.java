@@ -1,14 +1,27 @@
 package views;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.Vector;
 
+import shared.MsgDialog;
 import shared.SQLRunner;
 
 class Utils {
-  static void runPreparedStatement(PreparedStatement statement, int[] types, String[] values)
+  //// Queries
+
+  /**
+   * Set-up prepared statement IN-PLACE with values .
+   * 
+   * @param statement
+   * @param types
+   * @param values
+   * @throws SQLException
+   * @throws NumberFormatException
+   */
+  static void setupPreparedStatement(PreparedStatement statement, int[] types, String[] values)
       throws SQLException, NumberFormatException {
     for (int i = 0; i < values.length; i++) {
       int idx = i + 1;
@@ -26,11 +39,9 @@ class Utils {
         statement.setString(idx, value);
       }
     }
-    statement.executeUpdate();
   }
 
-  static Object[][] statementToObjectMatrix(SQLRunner runner, String statement) throws SQLException {
-    var result = runner.runQuery(statement);
+  static Object[][] resultSetToObjectMatrix(ResultSet result) throws SQLException {
     var metadata = result.getMetaData();
     int columnCnt = metadata.getColumnCount();
 
@@ -47,5 +58,41 @@ class Utils {
     dataVector.toArray(data);
 
     return data;
+  }
+
+  /**
+   * @return 레코드 값. 존재하지 않을 시 null 반환.
+   */
+  static Object[] selectOne(PreparedStatement statement, int[] types, String[] values)
+      throws NumberFormatException, SQLException {
+    ResultSet result = Utils.queryPreparedStatement(statement, new int[] {
+        Types.NUMERIC,
+    }, values);
+    Object[][] matrix = Utils.resultSetToObjectMatrix(result);
+
+    if (matrix.length == 0) {
+      new MsgDialog("Invalid ID", "입력한 ID의 데이터를 찾을 수 없습니다.")
+          .setVisible(true);
+      return null;
+    }
+
+    return matrix[0];
+  }
+
+  static void runPreparedStatement(PreparedStatement statement, int[] types, String[] values)
+      throws SQLException, NumberFormatException {
+    setupPreparedStatement(statement, types, values);
+    statement.executeUpdate();
+  }
+
+  static ResultSet queryPreparedStatement(PreparedStatement statement, int[] types, String[] values)
+      throws SQLException, NumberFormatException {
+    setupPreparedStatement(statement, types, values);
+    return statement.executeQuery();
+  }
+
+  // LATER: Also use PreparedStatement here
+  static Object[][] statementToObjectMatrix(SQLRunner runner, String statement) throws SQLException {
+    return resultSetToObjectMatrix(runner.runQuery(statement));
   }
 }

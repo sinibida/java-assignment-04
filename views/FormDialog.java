@@ -34,6 +34,8 @@ public class FormDialog extends JDialog {
   String[] fields;
   FormDialogListener listener;
 
+  String[] initialValue = null;
+
   Vector<JTextField> renderedFields;
 
   /**
@@ -71,6 +73,15 @@ public class FormDialog extends JDialog {
 
   public void setListener(FormDialogListener listener) {
     this.listener = listener;
+  }
+
+  /**
+   * 입력 폼의 초기값을 설정합니다. UPDATE 구문을 사용할 때 유용하다.
+   * 
+   * @param initialValue 초기값
+   */
+  public void setInitialValue(String[] initialValue) {
+    this.initialValue = initialValue;
   }
 
   boolean confirm() {
@@ -113,6 +124,13 @@ public class FormDialog extends JDialog {
         JTextField field = new JTextField(20);
         centerPanel.add(field);
         renderedFields.add(field);
+      }
+
+      if (initialValue != null) {
+        for (int i = 0; i < renderedFields.size(); i++) {
+          JTextField field = renderedFields.get(i);
+          field.setText(initialValue[i]);
+        }
       }
     }
     c.add(centerPanel, BorderLayout.CENTER);
