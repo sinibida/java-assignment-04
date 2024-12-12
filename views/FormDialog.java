@@ -23,7 +23,10 @@ public class FormDialog extends JDialog {
   static final String CANCEL_LABEL = "취소";
 
   public static interface FormDialogListener {
-    public void onSubmit(String[] values);
+    /**
+     * @return 폼 제출이 성공적으로 실행되었을 시 true를 반환할 것
+     */
+    public boolean onSubmit(String[] values);
   }
 
   String title;
@@ -70,14 +73,14 @@ public class FormDialog extends JDialog {
     this.listener = listener;
   }
 
-  void confirm() {
+  boolean confirm() {
     Vector<String> values = new Vector<>();
     for (JTextField field : renderedFields) {
       values.add(field.getText());
     }
     String[] ret = new String[values.size()];
     values.toArray(ret);
-    listener.onSubmit(ret);
+    return listener.onSubmit(ret);
   }
 
   void close() {
@@ -125,8 +128,8 @@ public class FormDialog extends JDialog {
       confirm.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          confirm();
-          close();
+          if (confirm())
+            close();
         }
       });
       bottomPanel.add(confirm);

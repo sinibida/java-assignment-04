@@ -2,6 +2,8 @@ package views;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLType;
+import java.sql.Types;
 import java.util.Vector;
 
 import shared.MsgDialog;
@@ -73,19 +75,53 @@ public class EmployeeTableViewListener implements TableViewListener {
     }
   }
 
+  void runPreparedStatement(PreparedStatement statement, int[] types, String[] values)
+      throws SQLException, NumberFormatException {
+    for (int i = 0; i < values.length; i++) {
+      int idx = i + 1;
+      final String value = values[i];
+
+      if (value.isEmpty()) {
+        statement.setNull(idx, types[i]);
+        continue;
+      }
+
+      if (types[i] == Types.NUMERIC) {
+        // Ssn, Salary, Superbision, WorksFor
+        statement.setInt(idx, Integer.parseInt(value));
+      } else {
+        statement.setString(idx, value);
+      }
+    }
+    statement.executeUpdate();
+  }
+
   @Override
   public void onInsert() {
     FormDialog dialog = new FormDialog("직원 추가", getColumnNames(), "추가", new FormDialogListener() {
       @Override
-      public void onSubmit(String[] values) {
+      public boolean onSubmit(String[] values) {
         try {
-          for (int i = 0; i < values.length; i++) {
-            insertStatement.setString(i, values[i]);
-          }
-          insertStatement.executeUpdate();
+          runPreparedStatement(insertStatement, new int[]{
+            Types.NUMERIC,
+            Types.DATE,
+            Types.VARCHAR,
+            Types.VARCHAR,
+            Types.NUMERIC,
+            Types.VARCHAR,
+            Types.VARCHAR,
+            Types.VARCHAR,
+            Types.NUMERIC,
+            Types.NUMERIC,
+          }, values);
+          return true;
         } catch (SQLException e) {
           new SQLExceptionDialog("Couldn't run SQL update.", INSERT_STATEMENT + " + " + String.join(", ", values), e)
               .setVisible(true);
+          return false;
+        } catch (NumberFormatException e) {
+          new MsgDialog("형식 에러", "알맞은 숫자 값을 입력해주세요: \n\n" + e.getMessage()).setVisible(true);;
+          return false;
         }
       }
 
