@@ -6,7 +6,6 @@ import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -20,17 +19,16 @@ import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
+import shared.MsgDialog;
 import shared.SQLRunner;
 
 public class MainFrame extends JFrame {
@@ -56,19 +54,7 @@ public class MainFrame extends JFrame {
   // Components
 
   private void showDialog(String title, String message) {
-    JDialog dialog = new JDialog(this, title, true);
-    dialog.setSize(400, 200);
-    dialog.setLocationRelativeTo(this);
-
-    JTextArea label = new JTextArea(message);
-
-    label.setMargin(new Insets(8, 8, 8, 8));
-    label.setEditable(false);
-    label.setLineWrap(true);
-    label.setAlignmentX(0.5f);
-    dialog.add(label, BorderLayout.CENTER);
-
-    dialog.setVisible(true);
+    new MsgDialog(title, message);
   }
 
   private JButton EventButton(String label, ActionListener l) {
@@ -176,7 +162,6 @@ public class MainFrame extends JFrame {
     panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
     JPanel buttonRow1 = new JPanel(new FlowLayout());
-
 
     buttonRow1.add(EventButton("Show", (event) -> {
       showStatementFieldResult();
