@@ -8,9 +8,9 @@ import shared.MsgDialog;
 
 class Main {
   // !!! 주소, 계정명, 비밀번호 변경 후 사용 !!!
-  final static String DB_URL = "jdbc:oracle:thin:@192.168.64.2:1521:xe";
-  final static String DB_USERNAME = "juna";
-  final static String DB_PASSWORD = "1234";
+  static final String DB_URL = "jdbc:oracle:thin:@192.168.64.2:1521:xe";
+  static final String DB_USERNAME = "juna";
+  static final String DB_PASSWORD = "1234";
 
   static LoaderArgs getLoaderArgs() {
     LoaderArgs args = new LoaderArgs();

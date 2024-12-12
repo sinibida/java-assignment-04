@@ -17,16 +17,14 @@ public class DepartmentTableViewListener implements TableViewListener {
       "ManagedBy", };
   static final String[] ID_COLUMNS = new String[] { "Num" };
 
-  // TODO replace to `static final`
-  // https://stackoverflow.com/a/11219598
   static final String SELECT_ALL_STATEMENT = "SELECT * FROM DEPATMENT";
 
   static final String SELECT_ID_STATEMENT = "SELECT * FROM DEPATMENT WHERE Num=?";
   static final int[] SELECT_ID_TYPES = new int[] {
       Types.NUMERIC,
   };
-  final static String SELECT_ID_TITLE = "변경할 데이터 조회";
-  final static String SELECT_ID_BUTTON = "선택";
+  static final String SELECT_ID_TITLE = "변경할 데이터 조회";
+  static final String SELECT_ID_BUTTON = "선택";
 
   static final String INSERT_STATEMENT = "INSERT INTO DEPATMENT VALUES (?, ?, ?)";
   static final int[] INSERT_TYPES = new int[] {
@@ -34,8 +32,8 @@ public class DepartmentTableViewListener implements TableViewListener {
       Types.VARCHAR,
       Types.NUMERIC,
   };
-  final static String INSERT_TITLE = "부서 추가";
-  final static String INSERT_BUTTON = "추가";
+  static final String INSERT_TITLE = "부서 추가";
+  static final String INSERT_BUTTON = "추가";
 
   static final String UPDATE_STATEMENT = "UPDATE DEPATMENT SET Num=?, Name=?, ManagedBy=? WHERE Num=?";
   static final int[] UPDATE_TYPES = new int[] {
@@ -44,8 +42,8 @@ public class DepartmentTableViewListener implements TableViewListener {
       Types.NUMERIC,
       Types.NUMERIC,
   };
-  final static String UPDATE_TITLE = "부서 정보 변경";
-  final static String UPDATE_BUTTON = "수정";
+  static final String UPDATE_TITLE = "부서 정보 변경";
+  static final String UPDATE_BUTTON = "수정";
 
   static final String DELETE_STATEMENT = "DELETE FROM DEPATMENT WHERE Num=?";
   static final int[] DELETE_TYPES = new int[] {
