@@ -1,4 +1,4 @@
-package views;
+package views.table;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -8,46 +8,66 @@ import java.util.Arrays;
 import shared.NumberFormatErrDialog;
 import shared.SQLExceptionDialog;
 import shared.SQLRunner;
+import views.FormDialog;
 import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
 
-public class ManageStartDateTableViewListener implements TableViewListener {
+public class EmployeeTableViewListener implements TableViewListener {
+  static final String[] ALL_COLUMNS = new String[] { "Ssn",
+      "BDate",
+      "Sex",
+      "Address",
+      "Salary",
+      "Fname",
+      "Minit",
+      "Lname",
+      "Supervision",
+      "WorksFor", };
+  static final String[] ID_COLUMNS = new String[] { "Ssn" };
 
-  static final String[] ALL_COLUMNS = new String[] {
-      "ManagedBy",
-      "StartDate",
-  };
-  static final String[] ID_COLUMNS = new String[] {
-      "ManagedBy",
-  };
+  static final String SELECT_ALL_STATEMENT = "SELECT * FROM EMPLOYEE";
 
-  static final String SELECT_ALL_STATEMENT = "SELECT * FROM MANAGESTARTDATE";
-
-  static final String SELECT_ID_STATEMENT = "SELECT * FROM MANAGESTARTDATE WHERE ManagedBy=?";
+  static final String SELECT_ID_STATEMENT = "SELECT * FROM EMPLOYEE WHERE Ssn=?";
   static final int[] SELECT_ID_TYPES = new int[] {
       Types.NUMERIC,
   };
   static final String SELECT_ID_TITLE = "변경할 데이터 조회";
   static final String SELECT_ID_BUTTON = "선택";
 
-  static final String INSERT_STATEMENT = "INSERT INTO MANAGESTARTDATE VALUES (?, ?)";
+  static final String INSERT_STATEMENT = "INSERT INTO EMPLOYEE VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
   static final int[] INSERT_TYPES = new int[] {
       Types.NUMERIC,
       Types.DATE,
+      Types.VARCHAR,
+      Types.VARCHAR,
+      Types.NUMERIC,
+      Types.VARCHAR,
+      Types.VARCHAR,
+      Types.VARCHAR,
+      Types.NUMERIC,
+      Types.NUMERIC,
   };
-  static final String INSERT_TITLE = "관리 시작일 추가";
+  static final String INSERT_TITLE = "직원 추가";
   static final String INSERT_BUTTON = "추가";
 
-  static final String UPDATE_STATEMENT = "UPDATE MANAGESTARTDATE SET ManagedBy=?, StartDate=? WHERE ManagedBy=?";
+  static final String UPDATE_STATEMENT = "UPDATE EMPLOYEE SET Ssn=?, BDate=?, Sex=?, Address=?, Salary=?, Fname=?, Minit=?, Lname=?, Supervision=?, WorksFor=? WHERE Ssn=?";
   static final int[] UPDATE_TYPES = new int[] {
       Types.NUMERIC,
       Types.DATE,
+      Types.VARCHAR,
+      Types.VARCHAR,
+      Types.NUMERIC,
+      Types.VARCHAR,
+      Types.VARCHAR,
+      Types.VARCHAR,
+      Types.NUMERIC,
+      Types.NUMERIC,
       Types.NUMERIC,
   };
-  static final String UPDATE_TITLE = "관리 시작일 변경";
+  static final String UPDATE_TITLE = "직원 정보 변경";
   static final String UPDATE_BUTTON = "수정";
 
-  static final String DELETE_STATEMENT = "DELETE FROM MANAGESTARTDATE WHERE ManagedBy=?";
+  static final String DELETE_STATEMENT = "DELETE FROM EMPLOYEE WHERE Ssn=?";
   static final int[] DELETE_TYPES = new int[] {
       Types.NUMERIC,
   };
@@ -59,7 +79,7 @@ public class ManageStartDateTableViewListener implements TableViewListener {
   PreparedStatement updateStatement;
   PreparedStatement deleteStatement;
 
-  public ManageStartDateTableViewListener(SQLRunner runner) {
+  public EmployeeTableViewListener(SQLRunner runner) {
     this.runner = runner;
 
     try {
@@ -160,6 +180,7 @@ public class ManageStartDateTableViewListener implements TableViewListener {
     FormDialog dialog = new FormDialog(UPDATE_TITLE, ALL_COLUMNS, UPDATE_BUTTON, new FormDialogListener() {
       @Override
       public boolean onSubmit(String[] values) {
+        // LATER: Abtract this try-catch w/ Abstract Class?
         try {
           String[] newValues = Arrays.copyOf(values, values.length + ID_COLUMNS.length);
           for (int i = 0; i < ID_COLUMNS.length; i++) {
@@ -188,5 +209,4 @@ public class ManageStartDateTableViewListener implements TableViewListener {
     dialog.setInitialValue(initialValue);
     dialog.setVisible(true);
   }
-
 }

@@ -1,4 +1,4 @@
-package views;
+package views.table;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -8,47 +8,47 @@ import java.util.Arrays;
 import shared.NumberFormatErrDialog;
 import shared.SQLExceptionDialog;
 import shared.SQLRunner;
+import views.FormDialog;
 import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
 
-public class DepartmentTableViewListener implements TableViewListener {
-  // LATER: 이 상수들을 파라미터라 서묭하면 일반화가 가능할 것 같다.
-  // 하지만 너무 복잡한 데이터 형식을 요구할 것 같다...
+public class ManageStartDateTableViewListener implements TableViewListener {
 
-  static final String[] ALL_COLUMNS = new String[] { "Num",
-      "Name",
-      "ManagedBy", };
-  static final String[] ID_COLUMNS = new String[] { "Num" };
+  static final String[] ALL_COLUMNS = new String[] {
+      "ManagedBy",
+      "StartDate",
+  };
+  static final String[] ID_COLUMNS = new String[] {
+      "ManagedBy",
+  };
 
-  static final String SELECT_ALL_STATEMENT = "SELECT * FROM DEPATMENT";
+  static final String SELECT_ALL_STATEMENT = "SELECT * FROM MANAGESTARTDATE";
 
-  static final String SELECT_ID_STATEMENT = "SELECT * FROM DEPATMENT WHERE Num=?";
+  static final String SELECT_ID_STATEMENT = "SELECT * FROM MANAGESTARTDATE WHERE ManagedBy=?";
   static final int[] SELECT_ID_TYPES = new int[] {
       Types.NUMERIC,
   };
   static final String SELECT_ID_TITLE = "변경할 데이터 조회";
   static final String SELECT_ID_BUTTON = "선택";
 
-  static final String INSERT_STATEMENT = "INSERT INTO DEPATMENT VALUES (?, ?, ?)";
+  static final String INSERT_STATEMENT = "INSERT INTO MANAGESTARTDATE VALUES (?, ?)";
   static final int[] INSERT_TYPES = new int[] {
       Types.NUMERIC,
-      Types.VARCHAR,
-      Types.NUMERIC,
+      Types.DATE,
   };
-  static final String INSERT_TITLE = "부서 추가";
+  static final String INSERT_TITLE = "관리 시작일 추가";
   static final String INSERT_BUTTON = "추가";
 
-  static final String UPDATE_STATEMENT = "UPDATE DEPATMENT SET Num=?, Name=?, ManagedBy=? WHERE Num=?";
+  static final String UPDATE_STATEMENT = "UPDATE MANAGESTARTDATE SET ManagedBy=?, StartDate=? WHERE ManagedBy=?";
   static final int[] UPDATE_TYPES = new int[] {
       Types.NUMERIC,
-      Types.VARCHAR,
-      Types.NUMERIC,
+      Types.DATE,
       Types.NUMERIC,
   };
-  static final String UPDATE_TITLE = "부서 정보 변경";
+  static final String UPDATE_TITLE = "관리 시작일 변경";
   static final String UPDATE_BUTTON = "수정";
 
-  static final String DELETE_STATEMENT = "DELETE FROM DEPATMENT WHERE Num=?";
+  static final String DELETE_STATEMENT = "DELETE FROM MANAGESTARTDATE WHERE ManagedBy=?";
   static final int[] DELETE_TYPES = new int[] {
       Types.NUMERIC,
   };
@@ -60,7 +60,7 @@ public class DepartmentTableViewListener implements TableViewListener {
   PreparedStatement updateStatement;
   PreparedStatement deleteStatement;
 
-  public DepartmentTableViewListener(SQLRunner runner) {
+  public ManageStartDateTableViewListener(SQLRunner runner) {
     this.runner = runner;
 
     try {

@@ -1,4 +1,4 @@
-package views;
+package views.table;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -8,6 +8,7 @@ import java.util.Arrays;
 import shared.NumberFormatErrDialog;
 import shared.SQLExceptionDialog;
 import shared.SQLRunner;
+import views.FormDialog;
 import views.FormDialog.FormDialogListener;
 import views.TableView.TableViewListener;
 

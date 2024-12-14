@@ -11,15 +11,15 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import shared.SQLRunner;
-import views.DepartmentLocationTableViewListener;
-import views.DepartmentTableViewListener;
-import views.DependentsTableViewListener;
-import views.EmployeeTableViewListener;
-import views.ManageStartDateTableViewListener;
 import views.MeImage;
-import views.ProjectTableViewListener;
 import views.TableView;
-import views.WorksOnTableViewListener;
+import views.table.DepartmentLocationTableViewListener;
+import views.table.DepartmentTableViewListener;
+import views.table.DependentsTableViewListener;
+import views.table.EmployeeTableViewListener;
+import views.table.ManageStartDateTableViewListener;
+import views.table.ProjectTableViewListener;
+import views.table.WorksOnTableViewListener;
 
 /**
  * MainFrame의 콘텐츠
