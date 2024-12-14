@@ -2,16 +2,12 @@ package app;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.ScrollPane;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import shared.SQLRunner;
@@ -23,6 +19,7 @@ import views.ManageStartDateTableViewListener;
 import views.MeImage;
 import views.ProjectTableViewListener;
 import views.TableView;
+import views.WorksOnTableViewListener;
 
 /**
  * MainFrame의 콘텐츠
@@ -51,6 +48,7 @@ public class MainContentPane extends JPanel {
       TableView manageStartDateView = new TableView("관리 시작일", new ManageStartDateTableViewListener(runner));
 
       TableView projectView = new TableView("프로젝트 정보", new ProjectTableViewListener(runner));
+      TableView worksOnView = new TableView("프로젝트 작업자", new WorksOnTableViewListener(runner));
 
       // 각 TablweView의 너비 설정
       employeeView.setPreferredSize(new Dimension(800, 0));
@@ -59,23 +57,26 @@ public class MainContentPane extends JPanel {
       departmentView.setPreferredSize(new Dimension(250, 0));
       departmentLocationView.setPreferredSize(new Dimension(150, 0));
       manageStartDateView.setPreferredSize(new Dimension(150, 0));
-      
+
       projectView.setPreferredSize(new Dimension(400, 0));
+      worksOnView.setPreferredSize(new Dimension(200, 0));
 
       // https://stackoverflow.com/a/46541119
       center.add(employeeView);
       center.add(Box.createHorizontalStrut(16));
       center.add(dependentView);
-      center.add(Box.createHorizontalStrut(32));
+      center.add(Box.createHorizontalStrut(48));
 
       center.add(departmentView);
       center.add(Box.createHorizontalStrut(16));
       center.add(departmentLocationView);
       center.add(Box.createHorizontalStrut(16));
       center.add(manageStartDateView);
-      center.add(Box.createHorizontalStrut(32));
-  
+      center.add(Box.createHorizontalStrut(48));
+
       center.add(projectView);
+      center.add(Box.createHorizontalStrut(16));
+      center.add(worksOnView);
     }
     JScrollPane scrollCenter = new JScrollPane(
         center,
