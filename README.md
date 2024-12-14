@@ -13,6 +13,8 @@ javac **/*.java && java -cp "ojdbc6.jar:." Main
 - `JFrame.pack()`: 프레임 내 컨테이너에 맞춰서 프레임의 크기를 맞추어줌
   - https://stackoverflow.com/a/22982334
 - `Array.copyOf(T[], len)`
+- `panel.add(Box.createVerticalStrut(50));`: BoxLayout에 간격 추가
+  - https://stackoverflow.com/a/46541119
 
 # 오답노트
 
