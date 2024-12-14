@@ -145,7 +145,10 @@ public class ManageStartDateTableViewListener implements TableViewListener {
     if (selectedRow == null)
       return;
 
-    String[] values = new String[] { selectedRow[0].toString() };
+    String[] values = new String[ID_COLUMNS.length];
+    for (int i = 0; i < values.length; i++) {
+      values[i] = selectedRow[i].toString(); 
+    }
     try {
       Utils.runPreparedStatement(deleteStatement, DELETE_TYPES, values);
     } catch (SQLException e) {

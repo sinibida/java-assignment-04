@@ -18,13 +18,14 @@ public class DepartmentLocationTableViewListener implements TableViewListener {
 
   static final String[] ALL_COLUMNS = new String[] { "Num",
       "Location", };
-  static final String[] ID_COLUMNS = new String[] { "Num" };
+  static final String[] ID_COLUMNS = new String[] { "Num", "Location" };
 
   static final String SELECT_ALL_STATEMENT = "SELECT * FROM DEPATMENT_Locations";
 
-  static final String SELECT_ID_STATEMENT = "SELECT * FROM DEPATMENT_Locations WHERE Num=?";
+  static final String SELECT_ID_STATEMENT = "SELECT * FROM DEPATMENT_Locations WHERE Num=? AND Location=?";
   static final int[] SELECT_ID_TYPES = new int[] {
       Types.NUMERIC,
+      Types.VARCHAR,
   };
   static final String SELECT_ID_TITLE = "변경할 데이터 조회";
   static final String SELECT_ID_BUTTON = "선택";
@@ -37,18 +38,20 @@ public class DepartmentLocationTableViewListener implements TableViewListener {
   static final String INSERT_TITLE = "부서 위치 추가";
   static final String INSERT_BUTTON = "추가";
 
-  static final String UPDATE_STATEMENT = "UPDATE DEPATMENT_Locations SET Num=?, Location=?, ManagedBy=? WHERE Num=?";
+  static final String UPDATE_STATEMENT = "UPDATE DEPATMENT_Locations SET Num=?, Location=? WHERE Num=? AND Location=?";
   static final int[] UPDATE_TYPES = new int[] {
       Types.NUMERIC,
       Types.VARCHAR,
       Types.NUMERIC,
+      Types.VARCHAR,
   };
   static final String UPDATE_TITLE = "부서 위치정보 변경";
   static final String UPDATE_BUTTON = "수정";
 
-  static final String DELETE_STATEMENT = "DELETE FROM DEPATMENT_Locations WHERE Num=?";
+  static final String DELETE_STATEMENT = "DELETE FROM DEPATMENT_Locations WHERE Num=? AND Location=?";
   static final int[] DELETE_TYPES = new int[] {
       Types.NUMERIC,
+      Types.VARCHAR,
   };
 
   SQLRunner runner;
@@ -143,7 +146,10 @@ public class DepartmentLocationTableViewListener implements TableViewListener {
     if (selectedRow == null)
       return;
 
-    String[] values = new String[] { selectedRow[0].toString() };
+    String[] values = new String[ID_COLUMNS.length];
+    for (int i = 0; i < values.length; i++) {
+      values[i] = selectedRow[i].toString(); 
+    }
     try {
       Utils.runPreparedStatement(deleteStatement, DELETE_TYPES, values);
     } catch (SQLException e) {
