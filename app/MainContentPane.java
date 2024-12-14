@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import shared.SQLRunner;
 import views.DepartmentTableViewListener;
+import views.DependentsTableViewListener;
 import views.EmployeeTableViewListener;
 import views.MeImage;
 import views.ProjectTableViewListener;
@@ -40,16 +41,20 @@ public class MainContentPane extends JPanel {
       center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
 
       TableView employeeView = new TableView("직원 정보", new EmployeeTableViewListener(runner));
+      TableView dependentView = new TableView("가족 정보", new DependentsTableViewListener(runner));
       TableView enrollmentView = new TableView("부서 정보", new DepartmentTableViewListener(runner));
       TableView projectView = new TableView("프로젝트 정보", new ProjectTableViewListener(runner));
 
       // 각 TablweView의 너비 설정
       employeeView.setPreferredSize(new Dimension(800, 0));
+      dependentView.setPreferredSize(new Dimension(400, 0));
       enrollmentView.setPreferredSize(new Dimension(400, 0));
       projectView.setPreferredSize(new Dimension(400, 0));
 
       // https://stackoverflow.com/a/46541119
       center.add(employeeView);
+      center.add(Box.createHorizontalStrut(16));
+      center.add(dependentView);
       center.add(Box.createHorizontalStrut(16));
       center.add(enrollmentView);
       center.add(Box.createHorizontalStrut(16));
