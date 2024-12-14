@@ -162,8 +162,10 @@ public class DepartmentTableViewListener implements TableViewListener {
       @Override
       public boolean onSubmit(String[] values) {
         try {
-          String[] newValues = Arrays.copyOf(values, values.length + 1);
-          newValues[values.length] = values[0];
+          String[] newValues = Arrays.copyOf(values, values.length + ID_COLUMNS.length);
+          for (int i = 0; i < ID_COLUMNS.length; i++) {
+            newValues[values.length + i] = values[i];
+          }
           Utils.runPreparedStatement(updateStatement, UPDATE_TYPES, newValues);
           return true;
         } catch (SQLException e) {
