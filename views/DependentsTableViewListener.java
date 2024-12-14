@@ -62,6 +62,7 @@ public class DependentsTableViewListener implements TableViewListener {
   static final String DELETE_STATEMENT = "DELETE FROM DEPENDENT WHERE DependentsOf=? AND Name=?";
   static final int[] DELETE_TYPES = new int[] {
       Types.NUMERIC,
+      Types.VARCHAR,
   };
 
   SQLRunner runner;
