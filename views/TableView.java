@@ -29,6 +29,7 @@ public class TableView extends JPanel {
 
   JTable table = null;
   JTableHeader tableHeader = null;
+  TableViewListener listener;
 
   /**
    * table과 tableHeader 값을 설정한다.
@@ -41,7 +42,18 @@ public class TableView extends JPanel {
     tableHeader.setReorderingAllowed(false);
   }
 
+  private void showData() {
+    Object[][] data = listener.getData();
+    String[] columnNames = listener.getColumnNames();
+
+    DefaultTableModel model = new DefaultTableModel(data, columnNames);
+    model.setColumnIdentifiers(columnNames);
+    table.setModel(model);
+  }
+
   public TableView(String headerText, TableViewListener listener) {
+    this.listener = listener;
+
     setLayout(new BorderLayout(0, 8));
 
     JLabel header = new JLabel(headerText);
@@ -67,12 +79,7 @@ public class TableView extends JPanel {
       selectButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
-          Object[][] data = listener.getData();
-          String[] columnNames = listener.getColumnNames();
-
-          DefaultTableModel model = new DefaultTableModel(data, columnNames);
-          model.setColumnIdentifiers(columnNames);
-          table.setModel(model);
+          showData();
         }
       });
 
@@ -106,5 +113,7 @@ public class TableView extends JPanel {
       bottomPanel.add(updateButton);
     }
     add(bottomPanel, BorderLayout.SOUTH);
+
+    showData();
   }
 }
