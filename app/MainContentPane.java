@@ -15,6 +15,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import shared.SQLRunner;
+import views.DepartmentLocationTableViewListener;
 import views.DepartmentTableViewListener;
 import views.DependentsTableViewListener;
 import views.EmployeeTableViewListener;
@@ -38,17 +39,20 @@ public class MainContentPane extends JPanel {
 
     JPanel center = new JPanel();
     {
+      // TODO 보고서 DEPATMENT_Location 기본키 확장
       center.setLayout(new BoxLayout(center, BoxLayout.X_AXIS));
 
       TableView employeeView = new TableView("직원 정보", new EmployeeTableViewListener(runner));
       TableView dependentView = new TableView("가족 정보", new DependentsTableViewListener(runner));
-      TableView enrollmentView = new TableView("부서 정보", new DepartmentTableViewListener(runner));
+      TableView departmentView = new TableView("부서 정보", new DepartmentTableViewListener(runner));
+      TableView departmentLocationView = new TableView("부서 위치", new DepartmentLocationTableViewListener(runner));
       TableView projectView = new TableView("프로젝트 정보", new ProjectTableViewListener(runner));
 
       // 각 TablweView의 너비 설정
       employeeView.setPreferredSize(new Dimension(800, 0));
       dependentView.setPreferredSize(new Dimension(400, 0));
-      enrollmentView.setPreferredSize(new Dimension(400, 0));
+      departmentView.setPreferredSize(new Dimension(250, 0));
+      departmentLocationView.setPreferredSize(new Dimension(150, 0));
       projectView.setPreferredSize(new Dimension(400, 0));
 
       // https://stackoverflow.com/a/46541119
@@ -56,7 +60,9 @@ public class MainContentPane extends JPanel {
       center.add(Box.createHorizontalStrut(16));
       center.add(dependentView);
       center.add(Box.createHorizontalStrut(16));
-      center.add(enrollmentView);
+      center.add(departmentView);
+      center.add(Box.createHorizontalStrut(16));
+      center.add(departmentLocationView);
       center.add(Box.createHorizontalStrut(16));
       center.add(projectView);
     }
