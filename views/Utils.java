@@ -65,9 +65,7 @@ class Utils {
    */
   static Object[] selectOne(PreparedStatement statement, int[] types, String[] values)
       throws NumberFormatException, SQLException {
-    ResultSet result = Utils.queryPreparedStatement(statement, new int[] {
-        Types.NUMERIC,
-    }, values);
+    ResultSet result = Utils.queryPreparedStatement(statement, types, values);
     Object[][] matrix = Utils.resultSetToObjectMatrix(result);
 
     if (matrix.length == 0) {
