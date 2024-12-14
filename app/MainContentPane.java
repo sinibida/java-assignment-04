@@ -48,7 +48,7 @@ public class MainContentPane extends JPanel {
 
       TableView departmentView = new TableView("부서 정보", new DepartmentTableViewListener(runner));
       TableView departmentLocationView = new TableView("부서 위치", new DepartmentLocationTableViewListener(runner));
-      TableView manageStartDateView = new TableView("부서 관리 시작일", new ManageStartDateTableViewListener(runner));
+      TableView manageStartDateView = new TableView("관리 시작일", new ManageStartDateTableViewListener(runner));
 
       TableView projectView = new TableView("프로젝트 정보", new ProjectTableViewListener(runner));
 

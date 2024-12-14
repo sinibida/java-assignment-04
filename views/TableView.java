@@ -2,6 +2,7 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -75,7 +76,8 @@ public class TableView extends JPanel {
     {
       bottomPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
 
-      JButton selectButton = new JButton("검색");
+      JButton selectButton = new JButton("?");
+      selectButton.setPreferredSize(new Dimension(25, 25));
       selectButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -83,7 +85,8 @@ public class TableView extends JPanel {
         }
       });
 
-      JButton insertButton = new JButton("추가");
+      JButton insertButton = new JButton("+");
+      insertButton.setPreferredSize(new Dimension(25, 25));
       insertButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -91,7 +94,8 @@ public class TableView extends JPanel {
         }
       });
 
-      JButton deleteButton = new JButton("삭제");
+      JButton deleteButton = new JButton("X");
+      deleteButton.setPreferredSize(new Dimension(25, 25));
       deleteButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -99,7 +103,8 @@ public class TableView extends JPanel {
         }
       });
 
-      JButton updateButton = new JButton("변경");
+      JButton updateButton = new JButton(">");
+      updateButton.setPreferredSize(new Dimension(25, 25));
       updateButton.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
